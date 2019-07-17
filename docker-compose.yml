@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+
+###########################
+#   Setup node container
+###########################
+  world-server:
+    build: ./hello-world-node
+    expose:
+      - ${HELLO_WORLD_SERVER_PORT}
+    environment:
+      API_HOST: ${HELLO_WORLD_API_HOST}
+      APP_SERVER_PORT: ${HELLO_WORLD_SERVER_PORT}
+    ports:
+      - ${HELLO_WORLD_SERVER_PORT}:${HELLO_WORLD_SERVER_PORT}
+    volumes:
+      - ./hello-world-node:/usr/src/app
+    command: node app.js
+
+###########################
+#   Setup node container
+###########################
+  space-server:
+    build: ./hello-space-node
+    expose:
+      - ${HELLO_SPACE_SERVER_PORT}
+    environment:
+      API_HOST: ${HELLO_SPACE_API_HOST}
+      APP_SERVER_PORT: ${HELLO_SPACE_SERVER_PORT}
+    ports:
+      - ${HELLO_SPACE_SERVER_PORT}:${HELLO_SPACE_SERVER_PORT}
+    volumes:
+      - ./hello-space-node:/usr/src/app
+    links:
+      - world-server
+    command: node app.js  
